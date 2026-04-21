@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Plagiarism Result</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #FDF6EC;
+        }
+
+        .container {
+            width: 70%;
+            margin: 50px auto;
+            background: #FAEDE3;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+            color: #3E2723;
+        }
+
+        h2 {
+            text-align: center;
+            color: #8B5E3C;
+        }
+
+        .similarity {
+            text-align: center;
+            font-size: 22px;
+            margin: 10px 0;
+        }
+
+        .status {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .high { color: #B91C1C; }
+        .medium { color: #D97706; }
+        .low { color: #6B8E23; }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            background: #E5E7EB;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-bar {
+            height: 25px;
+            line-height: 25px;
+            color: brown;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 20px;
+            width: 0; /* default */
+            transition: width 0.6s ease;
+        }
+
+        .high-bar { background: #B91C1C; }
+        .medium-bar { background: #D97706; }
+        .low-bar { background: #6B8E23; }
+
+        /*Diff Section */
+        pre {
+            background: #F9FAFB;
+            color: #111827;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid #E5E7EB;
+        }
+
+        .add {
+            color: #166534;
+            background: #DCFCE7;
+            display: block;
+            padding: 2px;
+        }
+
+        .remove {
+            color: #991B1B;
+            background: #FEE2E2;
+            display: block;
+            padding: 2px;
+        }
+
+        .normal {
+            color: #374151;
+            display: block;
+        }
+
+        .btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            text-align: center;
+            padding: 10px;
+            background: #8B5E3C;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .btn:hover {
+            background: #6F4E37;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Plagiarism Result</h2>
+
+    <!-- <div class="similarity"> 
+        Similarity: <b>{{ similarity }}%</b>
+    </div>--->
+
+    <h2>Similarity: {{ similarity }}%</h2>
+
+    <div style="text-align: right;">
+        <a href="/report/{{ pdf_similarity }}/">
+            <button style="
+                padding:10px;
+                background:green;
+                color:white;
+                border:none;
+                border-radius:5px;
+                cursor:pointer;
+            ">
+                Download PDF Report
+            </button>
+        </a>
+    </div>
+
+    <!-- Prog Bar -->
+    <div class="progress-container">
+        <div class="progress-bar {{ bar_class }}" data-width="{{ similarity }}">
+            {{ similarity }}%
+        </div>
+    </div>
+
+    {% if similarity > 80 %}
+        <div class="status high">High Plagiarism Detected</div>
+    {% elif similarity > 50 %}
+        <div class="status medium">Moderate Similarity</div>
+    {% else %}
+        <div class="status low">Low Similarity</div>
+    {% endif %}
+
+    <hr>
+
+    <h3>Line Comparison</h3>
+
+    <pre>
+        {% for type, line in diff %}
+        <span class="{{ type }}">{{ line }}</span>
+        {% endfor %}
+    </pre>
+
+    <a href="/" class="btn">Check Again</a>
+
+</div>
+
+
+<script>
+    document.querySelectorAll(".progress-bar").forEach(bar => {
+        const width = bar.getAttribute("data-width");
+        bar.style.width = width + "%";
+    });
+</script>
+
+</body>
+</html>

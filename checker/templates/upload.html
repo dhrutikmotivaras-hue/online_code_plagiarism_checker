@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Plagiarism Checker</title>
+    <style>
+        body {
+            background: #FDF6EC;
+            font-family: Arial;
+        }
+        .container {
+            width: 40%;
+            margin: 80px auto;
+            background: #FAEDE3;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            color: #3E2723;
+        }
+        h2 {
+            color: #8B5E3C;
+        }
+        input {
+            padding: 8px;
+            margin-top: 10px;
+        }
+        button {
+            background: #8B5E3C;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #6F4E37;
+        }
+        .note {
+            color: #6B7280;
+            font-size: 14px;
+        }
+        .error {
+            color: #B91C1C;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h2>Upload Code Files</h2>
+
+    <p class="note">
+        Only text/code files supported (.py, .java, .cpp, .txt, .html, .js) <br>
+        Upload Maximum file size 15MB
+    </p>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <p><b>File 1:</b></p>
+        <input type="file" name="file1" accept=".py,.java,.cpp,.txt,.html,.js" required>
+
+        <p><b>File 2:</b></p>
+        <input type="file" name="file2" accept=".py,.java,.cpp,.txt,.html,.js" required>
+
+        <br><br>
+        <button type="submit">Check Plagiarism</button>
+    </form>
+
+    {% if message %}
+        <p class="error">{{ message }}</p>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
